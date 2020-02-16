@@ -1,0 +1,82 @@
+Sub StockMarketAnalyst()
+
+'Pulled
+For Each ws In Worksheets
+
+ws.Range("I1").Value = "Ticker"
+ws.Range("J1").Value = "Yearly Change"
+ws.Range("K1").Value = "Percent Change"
+ws.Range("L1").Value = "Total Stock Volume"
+
+Dim TickerSymbol As String
+Dim YearlyChange As Double
+Dim YearlyOpenChange As Double
+Dim YearlyClosedChange As Double
+Dim PercentChange As Double
+Dim TotalStockVolume As Double
+Dim LastRow As Double
+Dim Summary_Table_Row As Double
+
+'Pull CC challenge vbs
+Summary_Table_Row = 2
+
+TotalStockVolume = 0
+
+'pulled from WellsFargo1
+LastRow = ws.Cells(Rows.Count, 1).End(xlUp).Row
+
+For i = 2 To LastRow
+
+TotalStockVolume = TotalStockVolume + ws.Cells(i, 7).Value
+
+'pulled from CC basic vbs
+If ws.Cells(i + 1, 1).Value <> ws.Cells(i, 1).Value Then
+
+'Pulled from cc Basic vbs
+
+TickerSymbol = ws.Cell(i, 1).Value
+
+ws.Range("I" & Summary_Table_Row).Value = TickerSymbol
+
+YearlyOpenChange = ws.Range("C" & i)
+YearlyClosedChange = ws.Range("F" & i)
+YearlyChange = YearlyClosedChange - YearlyOpenChange
+ws.Range("J" & Summary_Table_Row).Value = "Yearly Change"
+
+If YearlyOpenChange = 0 Then
+PercentChange = 0
+Else
+YearlyOpenChange = ws.Range("C" & i)
+PercentChange = YearlyChange / YearlyOpenChange
+End If
+
+
+'https://www.youtube.com/watch?v=Ts0H73hb8Cc
+ws.Range("K" & Summary_Table_Row).NumberFormat = "0.0%"
+ws.Range("K" & Summary_Table_Row).Value = PercentChange
+
+ws.Range("L" & Summary_Table_Row).Value = "Total Stock Volume"
+TotalStockVolume = 0
+
+'pulled from gradebookvbs
+If ws.Range("J" & Summary_Table_Row).Value >= 0 Then
+ws.Range("J" & Summary_Table_Row).Interior.ColorIndex = 4
+
+Else
+ws.Range("J" & Summary_Table_Row).Interior.ColorIndex = 3
+End If
+
+Summary_Table_Row = Summary_Table_Row + 1
+
+
+End If
+
+Next i
+
+Next ws
+
+
+
+    End Sub
+
+
